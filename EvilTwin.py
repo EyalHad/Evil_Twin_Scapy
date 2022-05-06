@@ -10,7 +10,13 @@ if __name__ == '__main__':
     for i in range(len(sniffAP.AP_LIST)):
         print("index [{0}] -> {1}".format(i, sniffAP.AP_LIST[i]))
         
-    index = input("Choooseee")
+    index = int(input("Choose an Access Point to ATTACK -   "))
     
-    sniffCL.start(sniffAP.AP_LIST[index][sniffAP.BSSID],sniffAP.AP_LIST[index][sniffAP.CHANNEL])
+    mac_ap = sniffAP.AP_LIST[index][sniffAP.BSSID]
+    channel = sniffAP.AP_LIST[index][sniffAP.CHANNEL]
+    
+    sniffCL.start(mac_ap, channel)
+    
+    for i in range(len(sniffCL.CL_LIST)):
+        print("index [{0}] -> {1}".format(i, sniffCL.CL_LIST[i]))
     

@@ -16,6 +16,8 @@ BSSID_SET = []
 
 stop_event = threading.Event()
 
+interface = "wlo1"
+
 
 
 
@@ -75,12 +77,12 @@ def start():
     # interface name, check using iwconfig
     interface = "wlo1"
     # start the thread that prints all the networks
-    printer = Thread(target=print_all, args=(stop_event))
+    printer = Thread(target=print_all)
     printer.daemon = True
     printer.start()
     
     # start the channel changer
-    channel_changer = Thread(target=change_channel, args=(stop_event))
+    channel_changer = Thread(target=change_channel)
     channel_changer.daemon = True
     channel_changer.start()
     
