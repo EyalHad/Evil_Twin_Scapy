@@ -20,3 +20,5 @@ if __name__ == '__main__':
     for i in range(len(sniffCL.CL_LIST)):
         print("index [{0}] -> {1}".format(i, sniffCL.CL_LIST[i]))
     
+    
+    index = int(input("Choose an Client to ATTACK -   "))

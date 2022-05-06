@@ -86,11 +86,11 @@ def start():
     channel_changer.daemon = True
     channel_changer.start()
     
-    
+    time_to_sniff = 15
     
     
     # start sniffing
-    sniff(prn=callback, iface=interface, timeout=10)
+    sniff(prn=callback, iface=interface, timeout=time_to_sniff)
     
-    time.sleep(10)
+    time.sleep(time_to_sniff)
     stop_event.set()
