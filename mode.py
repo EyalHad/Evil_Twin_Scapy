@@ -2,7 +2,8 @@ import os
 import sys
 
 
-# interface = sys.argv[1]
+interface = sys.argv[1]
+
 
 
 def monitor(interface):
@@ -15,3 +16,6 @@ def manage(interface):
     os.system("sudo ifconfig " + interface + " down")
     os.system("sudo iwconfig " + interface + " mode manage")
     os.system("sudo ifconfig " + interface + " up")
+    
+    
+manage(interface)

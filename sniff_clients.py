@@ -7,7 +7,7 @@ import pandas
 import time
 import os
 
-from scapy import layers
+from scapy.layers import *
 
 
 
@@ -18,12 +18,26 @@ AP_MAC = ""
 
 def callback(packet):
     global CL_LIST
-    if (packet.addr2 == AP_MAC or packet.addr3 == AP_MAC) and (packet.addr1 != "ff:ff:ff:ff:ff:ff"):
-        if packet.addr1 not in CL_LIST:
-            if packet.addr2 != packet.addr1 and packet.addr1 != packet.addr3:
-                CL_LIST.append(packet.addr1)
-                print("Client Added     " + packet.addr1)
+    # print(packet)
 
+    if packet.haslayer(Dot11QoS):
+        if packet.addr3 == AP_MAC:
+            if packet.addr1 != AP_MAC and packet.addr1 not in CL_LIST:
+                CL_LIST.append(packet.addr1)
+                print("Client Appended...  " + packet.addr1)
+                
+            if packet.addr2 != AP_MAC and packet.addr2 not in CL_LIST:
+                CL_LIST.append(packet.addr2)
+                print("Client Appended...  " + packet.addr2)
+                
+                
+                
+        # print("Qos")
+        # print(packet.addr1 +"----------------" + packet.addr2 + "--------------" + packet.addr3)       
+  
+
+        # print("ProbeResp")
+        # print(packet.addr1 +"----------------" + packet.addr2 + "--------------" + packet.addr3)       
 
 
 def start(nic_card, ap_mac, channel):
@@ -45,4 +59,4 @@ def start(nic_card, ap_mac, channel):
 
 
 
-# start("wlo1","a0:a3:f0:d7:0f:be", 6)
+# start("wlx7cc2c607f3a3","a0:a3:f0:d7:0f:be", 6)

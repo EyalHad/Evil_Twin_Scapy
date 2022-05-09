@@ -10,6 +10,7 @@ import time
 import os
 
 beacons_count = {}
+
 AP_LIST = []
 ESSID = 0
 BSSID = 1
@@ -26,6 +27,7 @@ networks = pandas.DataFrame(columns=["SSID", "BSSID", "Password","Beacons", "Cha
 networks.set_index("SSID", inplace=True)
 
 def callback(packet):
+    
     if packet.haslayer(Dot11Beacon):
         # extract the MAC address of the network
         bssid = packet[Dot11].addr3
@@ -43,6 +45,7 @@ def callback(packet):
         # get the crypto
         crypto = packet.sprintf("{Dot11Beacon:%Dot11Beacon.cap%}\
                 {Dot11ProbeResp:%Dot11ProbeResp.cap%}")
+        
         if re.search("privacy",crypto):
             crypto = "YES"
         else:
