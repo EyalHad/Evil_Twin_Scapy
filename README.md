@@ -64,13 +64,13 @@
 - 3. Follow the instructions that appers in the terminal<br><br>
 
 
-## Defence Tool
+## Defense Tool
  
 ### Schema
 
 ### Files
 
-### How to run the defence code
+### How to run the defense code
 
 ## Code Contributors
 
