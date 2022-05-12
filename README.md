@@ -75,11 +75,11 @@
 ## Code Contributors
 
 This project exists thanks to all the people who contribute.<br>
-<!-- <a href="https://github.com/Final-Project-bb/FairPolitics/graphs/contributors">
-  <img src="https://contrib.rocks/image?max=3&repo=Final-Project-bb/FairPolitics" />
-</a> -->
-* [Itay Sharabi](https://github.com/ItaySharabi)
+<a href="https://github.com/EyalHad/Evil_Twin_Scapy/graphs/contributors">
+  <img src="https://contrib.rocks/image?max=3&repo=EyalHad/Evil_Twin_Scapy" />
+</a>
 * [Eyal Hadad](https://github.com/EyalHad)
+* [Itay Sharabi](https://github.com/ItaySharabi)
 * [Shai Bonfil](https://github.com/shaiBonfil)
 
   ## 🤝 Contributing
