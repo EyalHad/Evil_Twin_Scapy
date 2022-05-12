@@ -8,8 +8,7 @@ import time
 import os
 
 from scapy.layers import *
-
-
+from scapy.layers.dot11 import *
 
 CL_LIST = []
 
@@ -18,22 +17,21 @@ AP_MAC = ""
 
 def callback(packet):
     global CL_LIST
-    # print(packet)
-
-    if packet.haslayer(Dot11QoS):
-        if packet.addr3 == AP_MAC:
-            if packet.addr1 != AP_MAC and packet.addr1 not in CL_LIST:
-                CL_LIST.append(packet.addr1)
-                print("Client Appended...  " + packet.addr1)
-                
-            if packet.addr2 != AP_MAC and packet.addr2 not in CL_LIST:
+    
+    if not packet.haslayer(Dot11ProbeResp):
+        if (packet.addr1 == AP_MAC) or (packet.addr2 == AP_MAC) or (packet.addr3 == AP_MAC):
+            if packet.addr1 != AP_MAC and packet.addr1 != "ff:ff:ff:ff:ff:ff" and packet.addr1 != None:
+                if packet.addr1 not in CL_LIST:
+                    CL_LIST.append(packet.addr1)
+                    print("Client Appended...  " + packet.addr1)
+            elif packet.addr2 != AP_MAC and packet.addr2 not in CL_LIST and packet.addr2 != None:
                 CL_LIST.append(packet.addr2)
                 print("Client Appended...  " + packet.addr2)
                 
                 
                 
         # print("Qos")
-        # print(packet.addr1 +"----------------" + packet.addr2 + "--------------" + packet.addr3)       
+    
   
 
         # print("ProbeResp")

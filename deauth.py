@@ -12,7 +12,7 @@ client = sys.argv[1]
 ### AP MAC address
 ap = sys.argv[2]
 ### Interafce name 
-interface = "wlo1"
+interface = sys.argv[3]
 
 '''
 RadioTap()/Dot11(...)/Dot11Deauth() 

